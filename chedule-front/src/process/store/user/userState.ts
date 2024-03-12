@@ -1,10 +1,9 @@
 import {defineStore} from "pinia";
-import User from "../models/user/userModel";
+import User from "../../../entities/models/user/userModel";
 
 export const userStore = defineStore('user', {
     state: (): User => ({
         id: '',
         userToken: '',
-        eblan: 'asd'
     }),
 });
