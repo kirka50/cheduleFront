@@ -1,5 +1,6 @@
 <template>
-  Авторизация
+  <router-view>
+  </router-view>
 </template>
 
 <script>
