@@ -15,13 +15,16 @@ export const useUserStore = defineStore(STATE_NAME, () => {
         userLogin: ''
     })
     const userInCookies = Cookies.get(STATE_NAME)
+    if (userInCookies) {
+        user.value.id = JSON.parse(userInCookies)._value.id
+        user.value.userToken = JSON.parse(userInCookies)._value.userToken
+    }
 
     const isUserAuth = computed(():Boolean => {
+        console.log('teku', user.value.userToken)
         return user.value.userToken !== '';
     })
-    if (userInCookies) {
-        console.log(JSON.parse(userInCookies))
-    }
+
     const setUser = (newUser) => {
         user.value.userToken = newUser.userToken
         user.value.id = newUser.id
@@ -41,7 +44,9 @@ export const useUserStore = defineStore(STATE_NAME, () => {
         user.value.userToken = token
     }
     watch(() => user, (state) => {
-        Cookies.set(STATE_NAME, JSON.stringify(state))
+        Cookies.set(STATE_NAME, JSON.stringify(state), {
+            expires: 1
+        })
     }, {deep: true})
     return {
         user,

@@ -9,15 +9,21 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "-": "^0.0.1",
+    "@mdi/font": "^7.4.47",
     "axios": "^1.6.8",
     "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
-    "vue": "^3.4.19"
+    "vee-validate": "^4.12.6",
+    "vite-plugin-vuetify": "^2.0.3",
+    "vue": "^3.4.19",
+    "vuetify": "^3.5.11"
   },
   "devDependencies": {
     "@types/vue": "^2.0.0",
     "@types/vue-router": "^2.0.0",
     "@vitejs/plugin-vue": "^5.0.4",
+    "sass": "^1.72.0",
     "typescript": "^5.2.2",
     "vite": "^5.1.4",
     "vue-tsc": "^1.8.27"

@@ -1,4 +1,5 @@
 import axios, {AxiosResponse} from "axios";
+import {useUserStore} from "../store/user/model/userStore";
 axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
 interface RequestParams {
@@ -8,6 +9,7 @@ interface RequestParams {
     headers?: Record<string, any>;
     params?: Record<string, any>;
 }
+
 export const makeRequest = async <T = any>({ method, url, data, headers, params }: RequestParams): Promise<T> =>
 {
     try {
@@ -18,9 +20,9 @@ export const makeRequest = async <T = any>({ method, url, data, headers, params 
             headers,
             params,
         });
-        return response.data;
+        return response;
     } catch (error) {
-        console.error(error);
+        console.log(error)
         return error
     }
 }
