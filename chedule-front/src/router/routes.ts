@@ -1,23 +1,28 @@
-import { pages } from '../views'
-import { RouteRecordRaw } from 'vue-router'
-import  LoginForm  from '../components/Authorization/LoginForm.vue'
-import RegistrationForm from '../components/Authorization/RegistrationForm.vue'
 
+import { RouteRecordRaw } from 'vue-router'
 export const routes: RouteRecordRaw[] = [
     {
-        path: '/auth', component: pages.Authorization, name: 'auth', children: [
+        path: '/auth', component: () => import('../views/Authorization.vue'), name: 'auth', children: [
             {
-                path: 'login', component: LoginForm, name:'login'
+                path: 'login', component: () => import('../components/Authorization/LoginForm.vue'), name:'login'
             },
             {
-                path: 'reg', component: RegistrationForm, name:'reg'
+                path: 'reg', component: () => import('../components/Authorization/RegistrationForm.vue'), name:'reg'
             },
         ]
     },
     {
-        path: '/me', component: pages.UserAccount, meta: {
+        path: '/me', component: () => import('../views/UserAccount.vue'),
+        meta: {
             requiresAuth: true
-        }
+        },
+        children: [
+            {path: 'personal', component: () => import('../views/Me/Personal.vue'),
+                meta: {
+                    requiresAuth: true
+                },
+            }
+        ]
     }
 
 ]

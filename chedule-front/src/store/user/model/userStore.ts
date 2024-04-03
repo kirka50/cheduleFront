@@ -1,5 +1,5 @@
 import {defineStore} from "pinia";
-import User from "./userType";
+import User from "../../../models/user/userType";
 import {computed, ref, watch} from "vue";
 import Cookies from 'js-cookie'
 

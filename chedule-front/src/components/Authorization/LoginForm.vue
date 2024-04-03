@@ -80,7 +80,7 @@
 
 <script setup>
 import {useUserStore} from "../../store/user/model/userStore";
-import {fetchUserLogin} from "../../store/user/model/fetchUserLogin";
+import {fetchUserLogin} from "../../services/user/fetchUserLogin";
 import {computed, ref} from "vue";
 import router from "../../router/";
 const userStore = useUserStore();

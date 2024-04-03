@@ -1,6 +1,6 @@
 import {fetchUserLogin} from "./fetchUserLogin";
 import {useUserStore} from "./index";
-import router from "../../../router";
+import router from "../../router";
 
 
 export function loginUser(login: string, password:string) {

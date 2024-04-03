@@ -1,6 +1,7 @@
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import { md3 } from 'vuetify/blueprints'
+import '@mdi/font/css/materialdesignicons.css'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
 const vuetify = createVuetify({
     blueprint: md3,

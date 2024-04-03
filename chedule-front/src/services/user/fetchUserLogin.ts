@@ -1,5 +1,5 @@
-import {userLoginData} from "./userLoginTypes";
-import {makeRequest} from "../../../api/makeRequest";
+import {userLoginData} from "../../models/user/userLoginTypes";
+import {makeRequest} from "../../api/makeRequest";
 
 
 export const fetchUserLogin = async (username:string, password:string) => {
