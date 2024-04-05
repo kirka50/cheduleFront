@@ -21,8 +21,20 @@ export const routes: RouteRecordRaw[] = [
                 meta: {
                     requiresAuth: true
                 },
-            }
+            },
+            {path: 'schedule', component: () => import('../views/Me/Schedule.vue'),
+                meta: {
+                    requiresAuth: true
+                },
+            },
+            {path: '', component: () => import('../views/Me/Main.vue'),
+                meta: {
+                    requiresAuth: true
+                },
+            },
         ]
+    },
+    {
+        path: '/', redirect: '/me'
     }
-
 ]

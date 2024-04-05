@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="user--account ">
-        <v-layout>
+        <v-layout class="fill-height">
           <v-navigation-drawer
               expand-on-hover
               rail
@@ -13,6 +13,8 @@
                   prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
                   subtitle="Личный кабинет"
                   title="Студент Студентович"
+                  @click="changeLocation('')"
+                  :active="isPageSelected('')"
               ></v-list-item>
             </v-list>
             <v-divider></v-divider>
@@ -32,27 +34,25 @@
                       :prepend-icon="item.icon"
                       :title="item.description"
                       :value="item.page"
-                      @click="changeLocation(item.page)"
+                      @click="changeLocation('/'+item.page)"
                       :active="isPageSelected(item.page)"></v-list-item>
-<!--                  <v-list-item prepend-icon="mdi-calendar-range" title="Расписание" value="schedule" :active="'schedule'== page"></v-list-item>
-                  <v-list-item prepend-icon="mdi-book-account" title="Зачётка" value="record" :active="'record'== page"></v-list-item>
-                  <v-list-item prepend-icon="mdi-briefcase" title="Портфолио" value="jobs" :active="'jobs'== page"></v-list-item>-->
               </v-list>
           </v-navigation-drawer>
-          <v-main>
+          <v-main class="fill-height">
             <router-view>
-
             </router-view>
           </v-main>
         </v-layout>
-
     </div>
   </div>
 </template>
 
 <script setup>
-import {computed, ref} from "vue";
-const page = ref(['personal'])
+import {computed, onBeforeMount, onBeforeUpdate, ref} from "vue";
+import router from "../router";
+import {useRoute} from "vue-router";
+const route = useRoute()
+const page = ref([''])
 const pages = ref([
   {
     page: 'personal',
@@ -75,13 +75,27 @@ const pages = ref([
     icon: 'mdi-briefcase'
   },
 ])
+
+function getCurrentLocation(){
+  return router.currentRoute.value.path.split('/')[2]
+}
+
+onBeforeMount(() => {
+  console.log(route)
+  page.value = [getCurrentLocation()]
+})
 function changeLocation(page) {
-  console.log(page)
+  router.push({
+      path: `/me${page}/`,
+      state: {page: page.value}
+})
 }
 
 const isPageSelected = ((currentPage)=> {
   return currentPage == page.value;
 })
+
+
 
 
 

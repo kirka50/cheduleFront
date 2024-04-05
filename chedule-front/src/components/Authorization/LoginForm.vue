@@ -5,7 +5,7 @@
       <input placeholder="Пароль" v-model="password">
       <button :disabled="isInputsAreFilled" @click="handleClick"> Войти </button>
   </div>-->
-  <div class="login">
+  <div class="login" @keydown.enter="handleLogin">
     <v-form v-model="valid" class="w-100" validate-on="input">
       <v-container>
         <v-row justify="center">
@@ -57,7 +57,7 @@
                 color="blue"
                 class="confirm--button"
                 block
-                @click="handleClick"
+                @click="handleLogin"
                 :disabled="isInputsAreFilled"
             >
               Войти
@@ -115,7 +115,7 @@ const passwordRules = [
 
 
 
-function handleClick() {
+function handleLogin() {
   loading.value = true
   errorMassage.value = ''
   fetchUserLogin(username.value, password.value)
