@@ -8,13 +8,14 @@
               location="left"
               permanent
           >
-            <v-list density="comfortable">
+            <v-list density="comfortable" v-model:selected="page">
               <v-list-item
                   prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
                   subtitle="Личный кабинет"
                   title="Студент Студентович"
                   @click="changeLocation('')"
                   :active="isPageSelected('')"
+                  value=''
               ></v-list-item>
             </v-list>
             <v-divider></v-divider>

@@ -20,7 +20,7 @@ export const makeRequest = async <T = any>({ method, url, data, headers, params 
             headers,
             params,
         });
-        return response;
+        return <T>response;
     } catch (error) {
         console.log(error)
         return error
