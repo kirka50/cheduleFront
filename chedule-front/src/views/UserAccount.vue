@@ -25,6 +25,7 @@
                   title="Hub"
                   prepend-icon="mdi-hub"
                   v-ripple
+                  @click="router.push('/hub')"
               >
               </v-list-item>
             </v-list>
@@ -67,7 +68,7 @@ const pages = ref([
   },
   {
     page: 'record',
-    description: 'Зачётка',
+    description: 'Успеваемость',
     icon: 'mdi-book-account'
   },
   {

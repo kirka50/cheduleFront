@@ -22,7 +22,7 @@ export const routes: RouteRecordRaw[] = [
                     requiresAuth: true
                 },
             },
-            {path: 'schedule', component: () => import('../views/Me/Schedule.vue'),
+            {path: 'schedule', component: () => import('../views/Me/PersonalSchedule.vue'),
                 meta: {
                     requiresAuth: true
                 },
@@ -32,9 +32,34 @@ export const routes: RouteRecordRaw[] = [
                     requiresAuth: true
                 },
             },
+            {path: 'record', component: () => import('../views/Me/PersonalRecords.vue'),
+                meta: {
+                    requiresAuth: true
+                },
+            },
+            {path: 'jobs', component: () => import('../views/Me/PersonalRecords.vue'),
+                meta: {
+                    requiresAuth: true
+                },
+            },
         ]
     },
     {
         path: '/', redirect: '/me'
-    }
+    },
+    {path: '/schedule', component: () => import('../views/Schedule.vue'),
+        meta: {
+            requiresAuth: true
+        },
+    },
+    {path: '/journal', component: () => import('../views/Journal.vue'),
+        meta: {
+            requiresAuth: true
+        },
+    },
+    {path: '/hub', component: () => import('../views/Hub.vue'),
+        meta: {
+            requiresAuth: true
+        },
+    },
 ]
