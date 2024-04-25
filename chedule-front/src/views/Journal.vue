@@ -18,22 +18,36 @@
       </v-list>
     </v-navigation-drawer>
     <v-main style="height: 250px">
-      {{chosenItem ? chosenItem[0].map((lesson) => {return lesson.student_marks}) : ''}}
       <v-data-table
-          v-if="chosenItem && chosenGroup"
-          :headers="['Фамилия'].concat(chosenItem[0].map((lesson) => {return lesson.lesson_name}))"
+          :headers="headers"
+          :items="students"
+          :items-per-page="5"
+          class="elevation-1"
       >
-
+        <template v-slot:item="{ item }">
+          <tr>
+            <td>{{ item.surname }}</td>
+            <td v-for="present in item.isPresent" :key="present">
+              <v-chip :color="present ? 'green': 'red'">
+                {{present  ? 'Был' : 'Не был'}}
+              </v-chip>
+            </td>
+          </tr>
+        </template>
       </v-data-table>
     </v-main>
   </v-layout>
 </template>
 
 <script setup>
-import {ref} from "vue";
+import {computed, ref} from "vue";
 import groups from  '../services/testData/groups.json'
 const chosenGroup = ref('')
 const chosenItem = ref('')
+const headers = ref( [{title: 'Фамилия', key: 'fio'}, {title:'Пара1'}, {title:'Пара2'}, {title:'Пара3'}])
+const students = ref( [
+  { surname: 'Иванов', isPresent: [true ,false, true] },
+])
 </script>
 
 <style scoped>

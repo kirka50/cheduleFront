@@ -39,6 +39,17 @@
                       @click="changeLocation('/'+item.page)"
                       :active="isPageSelected(item.page)"></v-list-item>
               </v-list>
+            <v-divider></v-divider>
+            <v-list>
+              <v-list-item
+                  class="cursor-pointer"
+                  title="Выйти"
+                  prepend-icon="mdi-logout"
+                  v-ripple
+                  @click="logout()"
+              >
+              </v-list-item>
+            </v-list>
           </v-navigation-drawer>
           <v-main class="fill-height">
             <router-view>
@@ -53,6 +64,9 @@
 import {computed, onBeforeMount, onBeforeUpdate, ref} from "vue";
 import router from "../router";
 import {useRoute} from "vue-router";
+import {useUserStore} from "../store/user/model/userStore";
+
+const userStore = useUserStore()
 const route = useRoute()
 const page = ref([''])
 const pages = ref([
@@ -91,6 +105,11 @@ function changeLocation(page) {
       path: `/me${page}/`,
       state: {page: page.value}
 })
+}
+
+function logout() {
+  router.push('/auth/login')
+  userStore.removeUser()
 }
 
 const isPageSelected = ((currentPage)=> {
