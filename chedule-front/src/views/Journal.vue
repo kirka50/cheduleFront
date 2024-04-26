@@ -3,7 +3,6 @@
     <v-navigation-drawer
         expand-on-hover
         rail
-        v-model="chosenGroup"
     >
       <v-list density="compact" nav v-model:selected="chosenGroup" @click="chosenItem = ''">
         <v-list-item v-for="group in groups" :title="group.group" :value="group"></v-list-item>
@@ -21,13 +20,13 @@
       <v-data-table
           :headers="headers"
           :items="students"
-          :items-per-page="5"
+          :items-per-page="students.lenght"
           class="elevation-1"
       >
         <template v-slot:item="{ item }">
           <tr>
             <td>{{ item.surname }}</td>
-            <td v-for="present in item.isPresent" :key="present">
+            <td v-for="present in checkPresent(item.isPresent)" :key="present">
               <v-chip :color="present ? 'green': 'red'">
                 {{present  ? 'Был' : 'Не был'}}
               </v-chip>
@@ -42,12 +41,37 @@
 <script setup>
 import {computed, ref} from "vue";
 import groups from  '../services/testData/groups.json'
-const chosenGroup = ref('')
-const chosenItem = ref('')
-const headers = ref( [{title: 'Фамилия', key: 'fio'}, {title:'Пара1'}, {title:'Пара2'}, {title:'Пара3'}])
-const students = ref( [
-  { surname: 'Иванов', isPresent: [true ,false, true] },
+const chosenGroup = ref([''])
+const chosenItem = ref([''])
+const headers = ref( [
+  {title: 'Фамилия', key: 'fio'}, 
+  {title:'Пара1', key: 'Пара1'}, 
+  {title:'Пара2', key: 'Пара2'}, 
+  {title:'Пара3', key: 'Пара3'},
+  {title:'Пара4', key: 'Пара4'},
 ])
+const students = ref( [
+  { surname: 'Петров', isPresent: ["Пара1", "Пара2", 'Пара4'] },
+])
+
+const checkPresent = (student) => {
+  const curHeaders = [...headers.value];
+  const curStudent = [...student]
+  curHeaders.shift();
+  return curHeaders.map(element => {
+    if (student.includes(element.key))
+      {      
+        curStudent.splice(curStudent.indexOf(element.key), 1)
+        return true;
+      }
+    else 
+    {
+      console.log('adad')
+      return false  ;
+    }
+  });
+}
+
 </script>
 
 <style scoped>
