@@ -62,4 +62,6 @@ export const routes: RouteRecordRaw[] = [
             requiresAuth: true
         },
     },
+    {path: '/test', component: () => import('../views/test/TestPage.vue'),
+    },
 ]

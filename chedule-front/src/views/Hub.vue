@@ -7,6 +7,7 @@
           justify="center"
       >
         <v-card
+            color="optional"
             elevation="6"
             prepend-icon="mdi-account"
             width="400"
