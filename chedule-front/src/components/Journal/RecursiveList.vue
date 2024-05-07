@@ -1,27 +1,37 @@
 <template>
-    <v-list-item v-for="(item, index) in items" :key="index">
+    <template v-for="(item, index) in items" :key="index">
       <v-list-group v-if="item.value">
         <template v-slot:activator="{props}">
           <v-list-item
               v-bind="props"
               :title="item.title"
-              @click="pushTitle(item.title)"
+              @click="setPath(item.title)"
           >
           </v-list-item>
         </template>
-        <RecursiveList @updateTitle="pushTitle" :title-list="titleList" v-if="item.value" :items="item.value" />
+        <RecursiveList @update-title="setPath" :node-path="addNode(item.title)" :title-list="titleList" v-if="item.value" :items="item.value" />
       </v-list-group>
       <v-list-item v-else
-                   @click="pushTitle(item.title)"
+                   @click="setPath(item.title)"
           :title="item.title"
       />
-    </v-list-item>
+    </template>
 </template>
 
 <script>
 export default {
   name: 'RecursiveList',
+  emits: ["update-title"],
+  data() {
+    return {
+      path: this.nodePath
+    }
+  },
   props: {
+    nodePath: {
+      type: String,
+      default: ''
+    },
     items: {
       type: Array,
       required: false,
@@ -32,8 +42,14 @@ export default {
     }
   },
   methods: {
-    pushTitle(title) {
-       this.$emit('updateTitle', ...this.titleList.push(title))
+    pushTitle(leaf) {
+      console.log(this.path + `_${leaf}`)
+    },
+    addNode(node) {
+      return this.nodePath + `_${node}`
+    },
+    setPath(leaf = '') {
+      this.$emit('update-title', leaf ? this.path + `_${leaf}` : this.path)
     }
   }
 };

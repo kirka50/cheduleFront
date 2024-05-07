@@ -1,9 +1,9 @@
 <template>
   <v-layout>
-    <v-list><recursive-list :title-list="testTitle" @updateTitle="updateTitle" :items="testList"/></v-list>
-
-
-
+    <v-list>
+      <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
+    </v-list>
+    {{testTitle}}
     <v-main>
       <v-container>
         <v-data-table
@@ -15,7 +15,7 @@
             <tr>
               <td> {{ item.studentName }}</td>
               <td v-for="studentPerf in item.lessons">
-                <v-chip :color="studentPerf.isPresent == null ? 'gray': studentPerf.isPresent ? 'green' : 'red'">
+                <v-chip :color="studentPerf.isPresent == null ? 'black': studentPerf.isPresent ? 'green' : 'red'">
                   {{ studentPerf.lessonMark }}
                 </v-chip>
               </td>
@@ -23,7 +23,6 @@
           </template>
         </v-data-table>
       </v-container>
-      {{testTitle}}
     </v-main>
   </v-layout>
 </template>
@@ -47,7 +46,9 @@ export default {
   },
   data() {
     return {
+
       testTitle: [],
+      avainableSemestrs: [{title:'Первый семестр', value: '1s'}, {title:'Второй семестр', value: '2s'}],
       testList: [
         {title: 'Первый семестр',
           value: [
@@ -127,7 +128,7 @@ export default {
         {
           studentName: 'Иван Иванов', lessons: [
             {lessonKey: 'Пара1', isPresent: true, lessonMark: 5},
-            {lessonKey: 'Пара2', isPresent: false, lessonMark: 5},
+            {lessonKey: 'Пара2', isPresent: false, lessonMark: 0},
             {lessonKey: 'Пара3', isPresent: null, lessonMark: 2}]
         }
       ]
