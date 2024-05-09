@@ -5,14 +5,14 @@
           <v-list-item
               v-bind="props"
               :title="item.title"
-              @click="setPath(item.title)"
+              @click="$emit('update-title', this.path + `_${item.title}`)"
           >
           </v-list-item>
         </template>
-        <RecursiveList @update-title="setPath" :node-path="addNode(item.title)" :title-list="titleList" v-if="item.value" :items="item.value" />
+        <RecursiveList @update-title="setPath" :node-path="addNode(item.title)" v-if="item.value" :items="item.value" />
       </v-list-group>
       <v-list-item v-else
-                   @click="setPath(item.title)"
+                   @click="$emit('update-title', this.path + `_${item.title}`)"
           :title="item.title"
       />
     </template>
@@ -36,10 +36,6 @@ export default {
       type: Array,
       required: false,
     },
-    titleList: {
-      type: Array,
-      required: false,
-    }
   },
   methods: {
     pushTitle(leaf) {
@@ -49,7 +45,7 @@ export default {
       return this.nodePath + `_${node}`
     },
     setPath(leaf = '') {
-      this.$emit('update-title', leaf ? this.path + `_${leaf}` : this.path)
+      this.$emit('update-title', leaf)
     }
   }
 };

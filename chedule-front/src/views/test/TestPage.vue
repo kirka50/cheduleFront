@@ -3,7 +3,7 @@
     <v-list>
       <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
     </v-list>
-    {{testTitle}}
+
     <v-main>
       <v-container>
         <v-data-table
@@ -23,6 +23,7 @@
           </template>
         </v-data-table>
       </v-container>
+      {{testTitle}}
     </v-main>
   </v-layout>
 </template>
