@@ -42,12 +42,13 @@ export default {
   components: {RecursiveList},
   methods: {
     updateTitle(newTitle) {
-      this.testTitle = newTitle
-    }
+      this.testTitle = newTitle.split('_')
+    },
+  },
+  computed: {
   },
   data() {
     return {
-
       testTitle: [],
       avainableSemestrs: [{title:'Первый семестр', value: '1s'}, {title:'Второй семестр', value: '2s'}],
       testList: [
