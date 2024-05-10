@@ -6,8 +6,8 @@
     <v-main>
         <v-layout class="fill-height ma-1">
           <v-main>
-            <v-card :title="tableTitle" class="fill-height ma-1">
-              <v-data-table
+            <v-card :title="getTableTitle" class="fill-height ma-1">
+<!--              <v-data-table
                   :headers="headers"
                   :items="students"
               >
@@ -25,18 +25,42 @@
                     </td>
                   </tr>
                 </template>
+              </v-data-table>-->
+              <v-data-table
+                  v-if="getTableFromType"
+                  :headers="getTableFromType.headers"
+                  :items="getTableFromType.students"
+
+              >
+                <template v-slot:item="{ item }"
+                >
+                  <tr>
+                    <td> {{ item.studentName }}</td>
+                    <td v-for="lesson in studentPresent(headers, item.lessons)">
+                      <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
+                        {{lesson.lessonMark}}
+                      </v-chip>
+                      <v-chip v-else color="red">
+                        Не отмчн
+                      </v-chip>
+                    </td>
+                  </tr>
+                </template>
               </v-data-table>
-                <div class="d-flex flex-column pa-6">
+              <v-card v-else>
+                Нету таблички то :(
+              </v-card>
+                <div v-if="getTablesTypes" class="d-flex flex-column pa-6">
                   <v-btn-toggle
-                      v-model="test"
+                      v-model="selectedTableType"
                       divided
                   >
-                    <v-btn text="Лекции"></v-btn>
-                    <v-btn text="Практики"></v-btn>
-                    <v-btn text="Лабы"></v-btn>
+                    <v-btn v-for="i in getTablesTypes" :text="i" :value="i">
+                    </v-btn>
                   </v-btn-toggle>
                 </div>
             </v-card>
+
           </v-main>
         </v-layout>
     </v-main>
@@ -46,6 +70,7 @@
 <script lang="ts">
 import RecursiveList from "../../components/Journal/RecursiveList.vue";
 import testList from '../../services/testData/testlist.js'
+import tablesData from '../../services/testData/journalsTables.js'
 
 type LessonMarks = 2 | 3 | 4 | 5;
 
@@ -59,7 +84,7 @@ export default {
   components: {RecursiveList},
   methods: {
     updateTitle(newTitle) {
-      this.tablePath = newTitle.split('_')
+      this.tablePath = newTitle
     },
     studentPresent([...headers],studentLessons) {
       headers.shift()
@@ -71,11 +96,43 @@ export default {
       })
     }
   },
+  computed: {
+    getSelectedTables() {
+      for (const table of this.tablesData) {
+        if (this.tablePath == table.tablePath) {
+          console.log('true')
+          return table
+        }
+      }
+      return false
+    },
+    getTablesTypes() {
+      return this.getSelectedTables ? this.getSelectedTables.lessonTables.map(lesson => lesson.lessonType) : ['']
+    },
+    getTableFromType() {
+      try {
+        for (const table of this.getSelectedTables.lessonTables) {
+          console.log(table.lessonType == this.selectedTableType, table.lessonType, this.selectedTableType)
+          if (table.lessonType == this.selectedTableType) {
+            return table
+          }
+        } return  false
+      }
+      catch (err) {
+        return  false
+      }
+    },
+    getTableTitle() {
+      return this.getSelectedTables && this.getTableFromType
+          ? this.getSelectedTables.lessonName + ` ${this.getTableFromType.lessonType}`
+          : this.getSelectedTables ? this.getSelectedTables.lessonName : ''
+    }
+  },
   data() {
     return {
       tablePath: [],
-      selectedTable: {},
-      avainableSemestrs: [{title:'Первый семестр', value: '1s'}, {title:'Второй семестр', value: '2s'}],
+      selectedTableType: this.getTablesTypes,
+      tablesData: tablesData,
       testList: testList,
       tableTitle: 'Математика практики',
       headers: [{title: 'Фамилия', key: 'fio'}, {title: 'Комплексные числа', key: 'Пара1'},
