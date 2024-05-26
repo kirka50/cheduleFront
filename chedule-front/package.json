@@ -11,11 +11,13 @@
   "dependencies": {
     "-": "^0.0.1",
     "axios": "^1.6.8",
+    "chart.js": "^4.4.3",
     "js-cookie": "^3.0.5",
     "pinia": "^2.1.7",
     "vee-validate": "^4.12.6",
     "vite-plugin-vuetify": "^2.0.3",
     "vue": "^3.4.19",
+    "vue-chartjs": "^5.3.1",
     "vue-router": "^4.3.0",
     "vuetify": "^3.5.11"
   },

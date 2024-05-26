@@ -52,7 +52,7 @@ export const routes: RouteRecordRaw[] = [
             requiresAuth: true
         },
     },
-    {path: '/journal', component: () => import('../views/Journal.vue'),
+    {path: '/journal', component: () => import('../views/test/TestPage.vue'),
         meta: {
             requiresAuth: true
         },
@@ -64,4 +64,7 @@ export const routes: RouteRecordRaw[] = [
     },
     {path: '/test', component: () => import('../views/test/TestPage.vue'),
     },
+    {path: '/Anal', component: () => import('../views/Analytics/AnalyticPage.vue'),
+    },
+
 ]

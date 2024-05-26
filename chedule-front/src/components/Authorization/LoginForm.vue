@@ -1,10 +1,4 @@
 <template>
-<!--  <div class="login">
-    Войти в учётную запись
-      <input placeholder="Имя пользователя" v-model="username">
-      <input placeholder="Пароль" v-model="password">
-      <button :disabled="isInputsAreFilled" @click="handleClick"> Войти </button>
-  </div>-->
   <div class="login" @keydown.enter="handleLogin">
     <v-form v-model="valid" class="w-100" validate-on="input">
       <v-container>

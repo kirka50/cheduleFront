@@ -58,6 +58,19 @@
             Расписание
           </template>
         </v-card>
+<!--        <v-card
+            elevation="6"
+            prepend-icon="mdi-account"
+            width="400"
+            min-width="100"
+            class="ma-2 pa-2"
+            link
+            @click="router.push('/Anal')"
+        >
+          <template v-slot:title>
+            Аналитика
+          </template>
+        </v-card>-->
       </v-row>
 
     </v-container>

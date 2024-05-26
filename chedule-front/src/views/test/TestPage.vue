@@ -1,55 +1,80 @@
 <template>
   <v-layout>
-    <v-list>
+
+    <v-list class="d-flex flex-column">
+      <v-btn prepend-icon="mdi-hub" @click="$router.push('/hub')"></v-btn>
+      <v-divider class="ma-3"></v-divider>
       <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
+      <v-divider class="ma-3"></v-divider>
     </v-list>
-    <v-main>
+    <v-main class="bg-grey-lighten-4">
         <v-layout class="fill-height ma-1">
           <v-main>
-            <v-card :title="getTableTitle" class="fill-height ma-1">
-<!--              <v-data-table
-                  :headers="headers"
-                  :items="students"
-              >
-                <template v-slot:item="{ item }"
-                >
-                  <tr>
-                    <td> {{ item.studentName }}</td>
-                    <td v-for="lesson in studentPresent(headers, item.lessons)">
-                      <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
-                        {{lesson.lessonMark}}
-                      </v-chip>
-                      <v-chip v-else color="red">
-                        Не отмчн
-                      </v-chip>
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>-->
-              <v-data-table
-                  v-if="getTableFromType"
-                  :headers="getTableFromType.headers"
-                  :items="getTableFromType.students"
+            <v-container :title="getTableTitle" class="ma-1">
+              <v-card style="margin-bottom: 5px" class="" :title="getTableTitle ? getTableTitle : 'Выберите таблицу' "></v-card>
+              <template v-if="getTableFromType.lessonType === 'Итоги'">
+                <v-row>
+                  <v-col>
+                    <v-select class="w-25" variant="outlined" v-model="selectedTable" :items="getTableFromType.tables.map(el => el.tableName)"></v-select>
+                  </v-col>
+                  <v-col class="d-flex justify-end">
+                    <v-select class="w-25" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
+                  </v-col>
+                </v-row>
+                <v-row>
+                  <v-col cols="6">
+                    <v-data-table
+                        v-if="getTableFromName(getTableFromType.tables, selectedTable).headers"
+                        :headers="getTableFromName(getTableFromType.tables, selectedTable).headers"
+                        :items="getTableFromName(getTableFromType.tables, selectedTable).students"
+                        class="rounded">
+                      <template v-slot:item="{ item }">
+                        <tr>
+                          <td>{{ item.studentName }}</td>
+                          <td v-for="lesson in studentPresent(getTableFromName(getTableFromType.tables, selectedTable)
+                        .headers, item.lessons)">
+                            <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
+                              {{lesson.lessonMark}}
+                            </v-chip>
+                            <v-chip v-else color="red">
+                              Не отмчн
+                            </v-chip>
+                          </td>
+                        </tr>
+                      </template>
+                    </v-data-table>
+                  </v-col>
+                  <v-col>
+                    <Line v-if="getChartFromName(getTableFromType.charts, selectedChart).chartData"
+                          :data="getChartFromName(getTableFromType.charts, selectedChart).chartData"
+                    >
 
-              >
-                <template v-slot:item="{ item }"
+                    </Line>
+                  </v-col>
+                </v-row>
+              </template>
+              <template v-else-if="getTableFromType">
+                <v-data-table
+                    :headers="getTableFromType.headers"
+                    :items="getTableFromType.students"
+                    class="rounded"
                 >
-                  <tr>
-                    <td> {{ item.studentName }}</td>
-                    <td v-for="lesson in studentPresent(headers, item.lessons)">
-                      <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
-                        {{lesson.lessonMark}}
-                      </v-chip>
-                      <v-chip v-else color="red">
-                        Не отмчн
-                      </v-chip>
-                    </td>
-                  </tr>
-                </template>
-              </v-data-table>
-              <v-card v-else>
-                Нету таблички то :(
-              </v-card>
+                  <template v-slot:item="{ item }"
+                  >
+                    <tr>
+                      <td>{{ item.studentName }}</td>
+                      <td v-for="lesson in studentPresent(getTableFromType.headers, item.lessons)">
+                        <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
+                          {{lesson.lessonMark}}
+                        </v-chip>
+                        <v-chip v-else color="red">
+                          Не отмчн
+                        </v-chip>
+                      </td>
+                    </tr>
+                  </template>
+                </v-data-table>
+              </template>
                 <div v-if="getTablesTypes" class="d-flex flex-column pa-6">
                   <v-btn-toggle
                       v-model="selectedTableType"
@@ -59,18 +84,33 @@
                     </v-btn>
                   </v-btn-toggle>
                 </div>
-            </v-card>
-
+            </v-container>
           </v-main>
         </v-layout>
     </v-main>
   </v-layout>
 </template>
+<!--TODO написать отображение выбранного селектора
 
+
+-->
 <script lang="ts">
 import RecursiveList from "../../components/Journal/RecursiveList.vue";
 import testList from '../../services/testData/testlist.js'
 import tablesData from '../../services/testData/journalsTables.js'
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+} from 'chart.js'
+import { Line } from 'vue-chartjs'
+
+ChartJS.register(Title, Tooltip, Legend, LineElement, CategoryScale, LinearScale, PointElement)
 
 type LessonMarks = 2 | 3 | 4 | 5;
 
@@ -81,7 +121,7 @@ interface Student {
 
 export default {
   name: "TestPage",
-  components: {RecursiveList},
+  components: {RecursiveList, Line},
   methods: {
     updateTitle(newTitle) {
       this.tablePath = newTitle
@@ -94,25 +134,39 @@ export default {
         }
         return {lessonKey: null, isPresent: false, lessonMark: null}
       })
+    },
+    getTableFromName(tablesArray, tableName) {
+      for (const table of tablesArray) {
+        if (table.tableName === tableName) {
+          return table
+        }
+      }
+      return false
+    },
+    getChartFromName(chartsArray, chartName) {
+      for (const chart of chartsArray) {
+        if (chart.chartName === chartName) {
+          return chart
+        }
+      }
+      return false
     }
   },
   computed: {
     getSelectedTables() {
       for (const table of this.tablesData) {
         if (this.tablePath == table.tablePath) {
-          console.log('true')
           return table
         }
       }
       return false
     },
     getTablesTypes() {
-      return this.getSelectedTables ? this.getSelectedTables.lessonTables.map(lesson => lesson.lessonType) : ['']
+      return this.getSelectedTables ? this.getSelectedTables.lessonTables.map(lesson => lesson.lessonType) : null
     },
     getTableFromType() {
       try {
         for (const table of this.getSelectedTables.lessonTables) {
-          console.log(table.lessonType == this.selectedTableType, table.lessonType, this.selectedTableType)
           if (table.lessonType == this.selectedTableType) {
             return table
           }
@@ -131,39 +185,11 @@ export default {
   data() {
     return {
       tablePath: [],
+      selectedTable: '',
+      selectedChart: '',
       selectedTableType: this.getTablesTypes,
       tablesData: tablesData,
       testList: testList,
-      tableTitle: 'Математика практики',
-      headers: [{title: 'Фамилия', key: 'fio'}, {title: 'Комплексные числа', key: 'Пара1'},
-        {title: 'Числа Фибоначи', key: 'Пара2'},
-        {title: 'Мэпл', key: 'Пара3'}],
-      students: [
-        {
-          studentName: 'Кирилл Резников', lessons: [
-            {lessonKey: 'Пара1', isPresent: true, lessonMark: 5},
-            {lessonKey: 'Пара2', isPresent: null, lessonMark: 3},
-            {lessonKey: 'Пара3', isPresent: null, lessonMark: 2}]
-        },
-        {
-          studentName: 'Кирилл Брагин', lessons: [
-            {lessonKey: 'Пара1', isPresent: true, lessonMark: 4},
-            {lessonKey: 'Пара2', isPresent: false, lessonMark: 3},
-            {lessonKey: 'Пара3', isPresent: true, lessonMark: 5}]
-        },
-        {
-          studentName: 'Ярослав Колташев', lessons: [
-            {lessonKey: 'Пара1', isPresent: null, lessonMark: 5},
-            {lessonKey: 'Пара2', isPresent: false, lessonMark: 3},
-            {lessonKey: 'Пара3', isPresent: null, lessonMark: 5}]
-        },
-        {
-          studentName: 'Савелий Капустин', lessons: [
-            {lessonKey: 'Пара1', isPresent: true, lessonMark: 5},
-            {lessonKey: 'Пара2', isPresent: true, lessonMark: 5},
-            {lessonKey: 'Пара3', isPresent: true, lessonMark: 5}]
-        },
-      ]
     }
   },
 }
