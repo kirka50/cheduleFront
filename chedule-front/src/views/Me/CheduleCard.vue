@@ -3,9 +3,16 @@
     <v-card-title class="bg-blue-lighten-1">{{dayName}}</v-card-title>
     <v-card-subtitle>{{date}}</v-card-subtitle>
     <v-card-item>
-      <v-list class="ga-">
+      <v-list class="ga-1">
         <v-list-item v-for="i in 7" prepend-icon="mdi-circle-small">
-          {{i}} пара - {{getLessonNameOrEmpty(i, cheduleList)}}
+          <v-tooltip :text="getLessonNameOrEmpty(i, cheduleList).hint" v-if="getLessonNameOrEmpty(i, cheduleList).hint">
+            <template v-slot:activator="{ props }">
+              <span v-bind="props">{{i}} пара - {{getLessonNameOrEmpty(i, cheduleList).lessonName}}</span>
+            </template>
+          </v-tooltip>
+          <template v-else>
+            {{i}} пара - {{getLessonNameOrEmpty(i, cheduleList).lessonName}}
+          </template>
         </v-list-item>
       </v-list>
     </v-card-item>
@@ -15,15 +22,16 @@
 <script>
 export default {
   name: "CheduleCard",
+
   methods: {
     getLessonNameOrEmpty(place, lessonsArray) {
       for (const lesson of lessonsArray) {
-        console.log(lesson)
-        if (lesson.lessonPlace == place) return lesson.lessonName
+        if (lesson.lessonPlace === place) return lesson
       } return ''
     }
   },
   computed: {
+
   },
   props: {
     dayName: {
@@ -37,7 +45,7 @@ export default {
     cheduleList: {
       type: Array,
       default() {
-        return [{lessonPlace: 1, lessonName: ''}]
+        return [{lessonPlace: 1, lessonName: '', hint:''}]
       },
       required: true
     }
