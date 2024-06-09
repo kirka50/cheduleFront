@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <div class="user--account ">
-        <v-layout class="fill-height">
+    <div class="user--account">
+        <v-layout class="fill-height  overflow-auto">
           <v-navigation-drawer
               expand-on-hover
               rail
@@ -127,6 +127,7 @@ const isPageSelected = ((currentPage)=> {
   height: 100vh;
   display: flex;
   flex-direction: column;
+
   .asd {
     padding: 5px;
   }
@@ -139,5 +140,4 @@ const isPageSelected = ((currentPage)=> {
     height: 100%;
   }
 }
-
 </style>

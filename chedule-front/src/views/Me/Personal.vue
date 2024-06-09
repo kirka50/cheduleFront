@@ -1,37 +1,42 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-card
-            variant="tonal"
-            class="asd"
-            :loading="!userMail"
-            title="Ваша почта"
-            :text="userMail"
-        >
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card
-            variant="tonal"
-            class="asd"
-            :loading="!userId"
-            title="Ваш userID"
-            :text="userId"
-        >
-        </v-card>
-      </v-col>
-      <v-col>
-        <v-card
-            variant="tonal"
-            class="asd"
-            :loading="!username"
-            title="Ваш логин"
-            :text="username"
-        >
-        </v-card>
-      </v-col>
-    </v-row>
+  <v-container class="flex-column flex-lg-row flex-xl-row flex-md-row d-flex ga-2 flex-wrap">
+    <v-card class="d-flex flex-column flex-lg-grow-1 flex-md-grow-1">
+      <v-card-title> Персональные данные </v-card-title>
+      <v-divider/>
+      <v-container class="ga-2 d-flex flex-column">
+        <v-text-field v-model="testData.userName" variant="outlined" hide-details="auto" label="ФИО"></v-text-field>
+        <v-divider></v-divider>
+        <v-text-field v-model="testData.birthDate" variant="outlined" hide-details="auto" label="Дата рождения" clearable></v-text-field>
+        <v-divider></v-divider>
+        Пол Мужской
+      </v-container>
+    </v-card>
+    <v-card class="d-flex flex-column flex-lg-grow-1 flex-md-grow-1">
+      <v-card-title> Данные об родственниках </v-card-title>
+      <v-divider/>
+      <v-container class="ga-2 d-flex flex-column">
+        <v-text-field v-model="testData.motherName" variant="outlined" hide-details="auto" label="ФИО" clearable></v-text-field>
+        <v-text-field v-model="testData.motherPhone" variant="outlined" hide-details="auto" label="Номер телефона" clearable></v-text-field>
+        <v-divider/>
+        <v-icon icon="mdi-plus"></v-icon>
+      </v-container>
+    </v-card>
+    <v-card class="d-flex flex-column flex-lg-grow-1 flex-md-1-0-100">
+      <v-card-title> Студенческие данные </v-card-title>
+      <v-divider/>
+      <v-container class="ga-2 d-flex flex-column flex-md-row flex-lg-row flex-wrap">
+        <v-text-field class="flex-row" v-model="testData.studentGroup" variant="outlined" hide-details="auto" label="Группа" clearable></v-text-field>
+        <v-divider class="hidden-md-and-up"></v-divider>
+        <v-text-field v-model="testData.studentFac" variant="outlined" hide-details="auto" label="Факультет" clearable></v-text-field>
+        <v-divider class="hidden-md-and-up"></v-divider>
+        <v-text-field v-model="testData.studentNaprav" variant="outlined" hide-details="auto" label="Направление" clearable></v-text-field>
+        <v-divider  class="hidden-md-and-up"></v-divider>
+        <v-text-field v-model="testData.studentKaf" variant="outlined" hide-details="auto" label="Кафедра" clearable></v-text-field>
+      </v-container>
+      <v-container>
+
+      </v-container>
+    </v-card>
   </v-container>
 </template>
 
@@ -43,7 +48,16 @@ import {useUserStore} from "../../store/user/model/userStore";
 const userStore = useUserStore();
 
 
-
+const testData = ref({
+  userName: 'Студент Студентович Студентов',
+  birthDate: '18.03.2002',
+  motherName: 'Елена Родитель Родителевич',
+  motherPhone: '89820002211',
+  studentGroup: 'ПЕ-01б',
+  studentFac: 'ИИиУ',
+  studentNaprav: '09.03.01',
+  studentKaf: 'ИСТ'
+})
 const userMail = ref('')
 const userId = ref('')
 const username = ref('')
