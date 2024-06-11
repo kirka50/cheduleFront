@@ -2,11 +2,11 @@
   <div class="container">
     <div class="user--account">
         <v-layout class="fill-height  overflow-auto">
+
           <v-navigation-drawer
               expand-on-hover
-              rail
               location="left"
-              permanent
+              v-model="drawer"
           >
             <v-list density="comfortable" v-model:selected="page">
               <v-list-item
@@ -51,7 +51,11 @@
               </v-list-item>
             </v-list>
           </v-navigation-drawer>
-          <v-main class="fill-height">
+          <v-main>
+            <v-app-bar disabled="true" >
+              <v-app-bar-nav-icon @click="drawer = !drawer" icon="mdi-menu"></v-app-bar-nav-icon>
+              {{}}
+            </v-app-bar>
             <router-view>
             </router-view>
           </v-main>
@@ -65,10 +69,10 @@ import {computed, onBeforeMount, onBeforeUpdate, ref} from "vue";
 import router from "../router";
 import {useRoute} from "vue-router";
 import {useUserStore} from "../store/user/model/userStore";
-
-const userStore = useUserStore()
-const route = useRoute()
-const page = ref([''])
+const drawer = ref(false);
+const userStore = useUserStore();
+const route = useRoute();
+const page = ref(['']);
 const pages = ref([
   {
     page: 'personal',
@@ -90,7 +94,7 @@ const pages = ref([
     description: 'Портфолио',
     icon: 'mdi-briefcase'
   },
-])
+]);
 
 function getCurrentLocation(){
   return router.currentRoute.value.path.split('/')[2]
@@ -99,12 +103,12 @@ function getCurrentLocation(){
 onBeforeMount(() => {
   console.log(route)
   page.value = [getCurrentLocation()]
-})
+});
 function changeLocation(page) {
   router.push({
       path: `/me${page}/`,
       state: {page: page.value}
-})
+});
 }
 
 function logout() {
@@ -114,7 +118,7 @@ function logout() {
 
 const isPageSelected = ((currentPage)=> {
   return currentPage == page.value;
-})
+});
 
 
 

@@ -1,5 +1,5 @@
 <template>
-  <v-container class="flex-column flex-lg-row flex-xl-row flex-md-row d-flex ga-2 flex-wrap">
+  <v-container class="flex-column d-flex ga-2 flex-wrap">
     <v-card class="d-flex flex-column flex-lg-grow-1 flex-md-grow-1">
       <v-card-title> Персональные данные </v-card-title>
       <v-divider/>
@@ -8,7 +8,12 @@
         <v-divider></v-divider>
         <v-text-field v-model="testData.birthDate" variant="outlined" hide-details="auto" label="Дата рождения" clearable></v-text-field>
         <v-divider></v-divider>
-        Пол Мужской
+        Пол
+        <v-select v-model="testData.studentGender" variant="outlined" :items="['Мужской','Женский']"></v-select>
+        <v-divider></v-divider>
+        <v-text-field v-model="testData.studentArdress" variant="outlined" hide-details="auto" label="Адресс проживания" clearable></v-text-field>
+        <v-divider></v-divider>
+        <v-text-field v-model="testData.studentPhone" variant="outlined" hide-details="auto" label="Номер телефона" clearable></v-text-field>
       </v-container>
     </v-card>
     <v-card class="d-flex flex-column flex-lg-grow-1 flex-md-grow-1">
@@ -50,13 +55,16 @@ const userStore = useUserStore();
 
 const testData = ref({
   userName: 'Студент Студентович Студентов',
+  studentGender: 'Мужской',
   birthDate: '18.03.2002',
   motherName: 'Елена Родитель Родителевич',
   motherPhone: '89820002211',
   studentGroup: 'ПЕ-01б',
   studentFac: 'ИИиУ',
   studentNaprav: '09.03.01',
-  studentKaf: 'ИСТ'
+  studentKaf: 'ИСТ',
+  studentArdress: 'г. Екатеринбург, Театральная 2/1 кв. 98',
+  studentPhone: '89827352131'
 })
 const userMail = ref('')
 const userId = ref('')
