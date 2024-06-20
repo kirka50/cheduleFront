@@ -1,1 +1,0 @@
-import{_ as e,c as t,o as r,r as n}from"./index-CX6m0bUr.js";const c={name:"Authorization"};function s(a,_,i,p,u,f){const o=n("router-view");return r(),t(o)}const d=e(c,[["render",s]]);export{d as default};
