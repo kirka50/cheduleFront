@@ -28,7 +28,7 @@
             ></v-text-field>
           </v-col>
         </v-row>
-        <v-row justify="center"  v-if="errorMassage">
+        <v-row justify="center" v-if="errorMassage">
           <v-col
               md="4"
           >
@@ -37,7 +37,7 @@
                 style="border-color: red;"
                 variant="outlined"
             >
-              {{errorMassage}}
+              {{ errorMassage }}
             </v-card>
           </v-col>
         </v-row>
@@ -77,6 +77,8 @@ import {useUserStore} from "../../store/user/model/userStore";
 import {fetchUserLogin} from "../../services/user/fetchUserLogin";
 import {computed, ref} from "vue";
 import router from "../../router/";
+import {faker, fakerRU, simpleFaker} from "@faker-js/faker"
+
 const userStore = useUserStore();
 const username = ref('')
 const password = ref('')
@@ -85,7 +87,7 @@ const loading = ref(false)
 const errorMassage = ref('')
 const userNameRules = [
   value => {
-      if (value) return true
+    if (value) return true
     return 'Требуется ввести логин'
   },
   value => {
@@ -105,14 +107,19 @@ const passwordRules = [
 ]
 
 
-
-
-
-
 function handleLogin() {
   loading.value = true
   errorMassage.value = ''
-  fetchUserLogin(username.value, password.value)
+  if (username.value == '123' && password.value == '123') {
+    userStore.updateToken(simpleFaker.string.uuid())
+    userStore.setUserName({userFirstName: fakerRU.person.firstName(), userSecondName: fakerRU.person.lastName()})
+    console.log('sdasda')
+    router.push('/me')
+  } else {
+    errorMassage.value = 'Что то пошло не так'
+  }
+  loading.value = false
+/*  fetchUserLogin(username.value, password.value)
       .then(
           res => {
             console.log(res)
@@ -120,8 +127,7 @@ function handleLogin() {
               userStore.updateToken(res.data.auth_token)
               console.log('sdasda')
               router.push('/me')
-            }
-            else if (res.response.status === 400) {
+            } else if (res.response.status === 400) {
               console.log('asd')
               errorMassage.value = res.response.data.non_field_errors[0]
             }
@@ -129,26 +135,26 @@ function handleLogin() {
             loading.value = false
           }
       ).catch(
-          err => {
-            if (err.response.status === 400) {
-              console.log('dadadad')
-            }
-            loading.value = false
-            }
-      )
-
+      err => {
+        if (err.response.status === 400) {
+          console.log('dadadad')
+        }
+        loading.value = false
+      }
+  )*/
 }
+
 const isInputsAreFilled = computed(() => {
-   return !(username.value.length >= 3 && password.value.length >= 3)
+  return !(username.value.length >= 3 && password.value.length >= 3)
 })
 
 </script>
 
 <style lang="scss">
-  .login {
-    display: flex;
-    height: 100vh;
-    align-items: center;
-    justify-content: center;
-  }
+.login {
+  display: flex;
+  height: 100vh;
+  align-items: center;
+  justify-content: center;
+}
 </style>

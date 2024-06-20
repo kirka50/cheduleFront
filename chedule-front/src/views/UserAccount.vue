@@ -10,9 +10,9 @@
           >
             <v-list density="comfortable" v-model:selected="page">
               <v-list-item
-                  prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
+                  prepend-icon="mdi-account"
                   subtitle="Личный кабинет"
-                  title="Студент Студентович"
+                  :title="userStore.getUser.userFirstName"
                   @click="changeLocation('')"
                   :active="isPageSelected('')"
                   value=''
@@ -69,6 +69,8 @@ import {computed, onBeforeMount, onBeforeUpdate, ref} from "vue";
 import router from "../router";
 import {useRoute} from "vue-router";
 import {useUserStore} from "../store/user/model/userStore";
+import {faker} from "@faker-js/faker";
+
 const drawer = ref(false);
 const userStore = useUserStore();
 const route = useRoute();

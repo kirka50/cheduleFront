@@ -5,19 +5,26 @@ import Cookies from 'js-cookie'
 
 type Token = String
 const STATE_NAME: String = 'user'
-
+interface userName {
+    userFirstName: string,
+    userSecondName: string,
+}
 
 export const useUserStore = defineStore(STATE_NAME, () => {
     const user = ref<User>({
         id: '',
         userToken: '',
         userEmail: '',
-        userLogin: ''
+        userLogin: '',
+        userFirstName: '',
+        userSecondName: '',
     })
     const userInCookies = Cookies.get(STATE_NAME)
     if (userInCookies) {
         user.value.id = JSON.parse(userInCookies)._value.id
         user.value.userToken = JSON.parse(userInCookies)._value.userToken
+        user.value.userFirstName = JSON.parse(userInCookies)._value.userFirstName
+        user.value.userSecondName = JSON.parse(userInCookies)._value.userSecondName
     }
 
     const isUserAuth = computed(():Boolean => {
@@ -30,6 +37,10 @@ export const useUserStore = defineStore(STATE_NAME, () => {
         user.value.id = newUser.id
         user.value.userEmail = newUser.userEmail
         user.value.userLogin = newUser.userLogin
+    }
+    const setUserName = (newUser: userName) => {
+        user.value.userFirstName = newUser.userFirstName
+        user.value.userSecondName = newUser.userSecondName
     }
     const getUser = computed(() => {
         return user.value
@@ -54,6 +65,7 @@ export const useUserStore = defineStore(STATE_NAME, () => {
         isUserAuth,
         removeUser,
         updateToken,
-        setUser
+        setUser,
+        setUserName
     }
 })
