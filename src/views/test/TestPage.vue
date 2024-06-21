@@ -1,17 +1,25 @@
 <template>
   <v-layout>
-
-    <v-list class="d-flex flex-column">
-      <v-btn prepend-icon="mdi-hub" @click="$router.push('/hub')"></v-btn>
-      <v-divider class="ma-3"></v-divider>
-      <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
-      <v-divider class="ma-3"></v-divider>
-    </v-list>
+    <v-navigation-drawer
+        width="350"
+        expand-on-hover
+        v-model="drawer"
+    >
+      <v-list slim class="d-flex flex-column">
+        <v-list-item prepend-icon="mdi-hub" @click="$router.push('/hub')">Hub</v-list-item>
+        <v-divider class="ma-3"></v-divider>
+        <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
+        <v-divider class="ma-3"></v-divider>
+      </v-list>
+    </v-navigation-drawer>
+    <v-app-bar>
+      <v-app-bar-nav-icon icon="mdi-menu" @click="drawer = !drawer"></v-app-bar-nav-icon>
+      <v-app-bar-title>{{getTableTitle ? getTableTitle : 'Выберите таблицу' }}</v-app-bar-title>
+    </v-app-bar>
     <v-main class="bg-grey-lighten-4">
         <v-layout class="fill-height ma-1">
           <v-main>
             <v-container :title="getTableTitle" class="ma-1">
-              <v-card style="margin-bottom: 5px" class="" :title="getTableTitle ? getTableTitle : 'Выберите таблицу' "></v-card>
               <template v-if="getTableFromType.lessonType === 'Итоги'">
                 <v-row>
                   <v-col>
@@ -178,6 +186,7 @@ export default {
   },
   data() {
     return {
+      drawer: false,
       tablePath: [],
       selectedTable: '',
       selectedChart: '',
