@@ -54,7 +54,7 @@
 
               <v-col>
                 <v-col class="d-flex justify-end">
-                  <v-select class="h-25 hidden-md-and-up-and-down" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
+                  <v-select class="h-25 hidden-md-and-up" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
                 </v-col>
                 <Line v-if="getChartFromName(getTableFromType.charts, selectedChart).chartData"
                       :data="getChartFromName(getTableFromType.charts, selectedChart).chartData"
