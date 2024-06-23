@@ -1,77 +1,45 @@
 <template>
-  <v-layout>
-    <v-navigation-drawer
-        width="350"
-        expand-on-hover
-        v-model="drawer"
-    >
-      <v-list slim class="d-flex flex-column">
-        <v-list-item prepend-icon="mdi-hub" @click="$router.push('/hub')">Hub</v-list-item>
-        <v-divider class="ma-3"></v-divider>
-        <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
-        <v-divider class="ma-3"></v-divider>
-      </v-list>
-    </v-navigation-drawer>
-    <v-app-bar>
-      <v-app-bar-nav-icon icon="mdi-menu" @click="drawer = !drawer"></v-app-bar-nav-icon>
-      <v-app-bar-title>{{getTableTitle ? getTableTitle : 'Выберите таблицу' }}</v-app-bar-title>
-    </v-app-bar>
-    <v-main class="bg-grey-lighten-4">
-        <v-layout class="fill-height ma-1">
-          <v-main>
-            <v-container :title="getTableTitle" class="ma-1">
-              <template v-if="getTableFromType.lessonType === 'Итоги'">
-                <v-row>
-                  <v-col>
-                    <v-select class="w-25" variant="outlined" v-model="selectedTable" :items="getTableFromType.tables.map(el => el.tableName)"></v-select>
-                  </v-col>
-                  <v-col class="d-flex justify-end">
-                    <v-select class="w-25" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
-                  </v-col>
-                </v-row>
-                <v-row>
-                  <v-col cols="6">
-                    <v-data-table
-                        v-if="getTableFromName(getTableFromType.tables, selectedTable).headers"
-                        :headers="getTableFromName(getTableFromType.tables, selectedTable).headers"
-                        :items="getTableFromName(getTableFromType.tables, selectedTable).students"
-                        class="rounded">
-                      <template v-slot:item="{ item }">
-                        <tr>
-                          <td>{{ item.studentName }}</td>
-                          <td v-for="lesson in studentPresent(getTableFromName(getTableFromType.tables, selectedTable)
-                        .headers, item.lessons)">
-                            <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
-                              {{lesson.lessonMark}}
-                            </v-chip>
-                            <v-chip v-else color="red">
-                              Не отмчн
-                            </v-chip>
-                          </td>
-                        </tr>
-                      </template>
-                    </v-data-table>
-                  </v-col>
-                  <v-col>
-                    <Line v-if="getChartFromName(getTableFromType.charts, selectedChart).chartData"
-                          :data="getChartFromName(getTableFromType.charts, selectedChart).chartData"
-                    >
-
-                    </Line>
-                  </v-col>
-                </v-row>
-              </template>
-              <template v-else-if="getTableFromType">
+  <div class="container">
+    <v-layout class="h-100">
+      <v-navigation-drawer
+          width="350"
+          expand-on-hover
+          v-model="drawer"
+      >
+        <v-list slim class="d-flex flex-column">
+          <v-list-item prepend-icon="mdi-hub" @click="$router.push('/hub')">Hub</v-list-item>
+          <v-divider class="ma-3"></v-divider>
+          <RecursiveList @update-title="updateTitle" :items="testList"></RecursiveList>
+          <v-divider class="ma-3"></v-divider>
+        </v-list>
+      </v-navigation-drawer>
+      <v-app-bar>
+        <v-app-bar-nav-icon icon="mdi-menu" @click="drawer = !drawer"></v-app-bar-nav-icon>
+        <v-app-bar-title>{{getTableTitle ? getTableTitle : 'Выберите таблицу' }}</v-app-bar-title>
+      </v-app-bar>
+      <v-main class="bg-grey-lighten-4 fill-height">
+        <v-container :title="getTableTitle" class="h-100 ma-1 d-flex flex-column" >
+          <template v-if="getTableFromType.lessonType === 'Итоги'">
+            <v-row class="d-flex flex-column">
+              <v-col>
+                <v-select class="h-25" variant="outlined" v-model="selectedTable" :items="getTableFromType.tables.map(el => el.tableName)"></v-select>
+              </v-col>
+              <v-col class="d-flex justify-end hidden-sm-and-down">
+                <v-select class="h-25 hidden-sm-and-down" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
+              </v-col>
+            </v-row>
+            <v-row>
+              <v-col>
                 <v-data-table
-                    :headers="getTableFromType.headers"
-                    :items="getTableFromType.students"
-                    class="rounded"
-                >
-                  <template v-slot:item="{ item }"
-                  >
+                    v-if="getTableFromName(getTableFromType.tables, selectedTable).headers"
+                    :headers="getTableFromName(getTableFromType.tables, selectedTable).headers"
+                    :items="getTableFromName(getTableFromType.tables, selectedTable).students"
+                    class="rounded">
+                  <template v-slot:item="{ item }">
                     <tr>
                       <td>{{ item.studentName }}</td>
-                      <td v-for="lesson in studentPresent(getTableFromType.headers, item.lessons)">
+                      <td v-for="lesson in studentPresent(getTableFromName(getTableFromType.tables, selectedTable)
+                        .headers, item.lessons)">
                         <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
                           {{lesson.lessonMark}}
                         </v-chip>
@@ -82,21 +50,56 @@
                     </tr>
                   </template>
                 </v-data-table>
+              </v-col>
+
+              <v-col>
+                <v-col class="d-flex justify-end">
+                  <v-select class="h-25 hidden-md-and-up-and-down" variant="outlined" v-model="selectedChart" :items="getTableFromType.charts.map(el => el.chartName)"></v-select>
+                </v-col>
+                <Line v-if="getChartFromName(getTableFromType.charts, selectedChart).chartData"
+                      :data="getChartFromName(getTableFromType.charts, selectedChart).chartData"
+                >
+
+                </Line>
+              </v-col>
+            </v-row>
+          </template>
+          <template v-else-if="getTableFromType">
+            <v-data-table
+                :headers="getTableFromType.headers"
+                :items="getTableFromType.students"
+                class="rounded"
+            >
+              <template v-slot:item="{ item }"
+              >
+                <tr>
+                  <td>{{ item.studentName }}</td>
+                  <td v-for="lesson in studentPresent(getTableFromType.headers, item.lessons)">
+                    <v-chip v-if="lesson.lessonKey" :color="lesson.isPresent == null ? 'grey-darken-3': lesson.isPresent ? 'green' : 'red'">
+                      {{lesson.lessonMark}}
+                    </v-chip>
+                    <v-chip v-else color="red">
+                      Не отмчн
+                    </v-chip>
+                  </td>
+                </tr>
               </template>
-                <div v-if="getTablesTypes" class="d-flex flex-column pa-6">
-                  <v-btn-toggle
-                      v-model="selectedTableType"
-                      divided
-                  >
-                    <v-btn v-for="i in getTablesTypes" :text="i" :value="i">
-                    </v-btn>
-                  </v-btn-toggle>
-                </div>
-            </v-container>
-          </v-main>
-        </v-layout>
-    </v-main>
-  </v-layout>
+            </v-data-table>
+          </template>
+          <div v-if="getTablesTypes" class="d-flex flex-column pa-6">
+            <v-btn-toggle
+                v-model="selectedTableType"
+                divided
+            >
+              <v-btn v-for="i in getTablesTypes" :text="i" :value="i">
+              </v-btn>
+            </v-btn-toggle>
+          </div>
+        </v-container>
+      </v-main>
+    </v-layout>
+
+  </div>
 
 </template>
 <!--TODO написать отображение выбранного селектора
@@ -199,5 +202,7 @@ export default {
 </script>
 
 <style scoped>
-
+  .container {
+    height: 100vh;
+  }
 </style>

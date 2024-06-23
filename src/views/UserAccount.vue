@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <div class="user--account">
-        <v-layout class="fill-height  overflow-auto">
+        <v-layout class="fill-height overflow-auto">
 
           <v-navigation-drawer
               expand-on-hover
