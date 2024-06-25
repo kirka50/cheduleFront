@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://kirka50.github.io/cheduleFront/",
   "scripts": {
     "dev": "vite --host",
     "build": "vue-tsc && vite build",
