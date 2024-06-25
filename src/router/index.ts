@@ -2,7 +2,7 @@ import {createRouter, createWebHistory} from 'vue-router'
 import {routes} from "./routes";
 import {useUserStore} from "../store/user/model/userStore";
 const router = createRouter({
-    history: createWebHistory('/cheduleFront'),
+    history: createWebHistory('/cheduleFront/'),
     routes,
 })
 router.beforeEach((to,from, next) => {
